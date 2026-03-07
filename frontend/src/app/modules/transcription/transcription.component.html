@@ -1,0 +1,62 @@
+<div class="transcription-page">
+  @if (!recordingId) {
+    <!-- No recording ID provided -->
+    <div class="error-message">
+      <p>Recording ID is required</p>
+    </div>
+  } @else if (isLoading) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading transcription...</p>
+    </div>
+  } @else {
+    <!-- Main content -->
+    <div class="page-content">
+      <!-- Header section -->
+      <div class="page-header">
+        <div class="header-info">
+          <!-- Breadcrumb -->
+          <nav class="breadcrumb" aria-label="Breadcrumb">
+            <ol class="breadcrumb-list">
+              <li class="breadcrumb-item">
+                <a routerLink="/recordings" class="breadcrumb-link">Recordings</a>
+              </li>
+              <li class="breadcrumb-separator">
+                <svg class="separator-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              </li>
+              <li class="breadcrumb-item">
+                <span class="breadcrumb-page">Transcript</span>
+              </li>
+            </ol>
+          </nav>
+
+          <!-- Title and patient info -->
+          <h1 class="page-title">Conversation Transcript</h1>
+          <p class="patient-info">
+            Patient: {{ patient?.firstName + ' ' + patient?.lastName || 'Unknown' }} |
+            Date: {{ formatDate(recording?.createdAt!) }}
+          </p>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="header-actions">
+          <button class="btn-outline" (click)="navigateBack()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back
+          </button>
+          <button class="btn-primary" (click)="navigateToPatient()">
+            View Patient
+          </button>
+        </div>
+      </div>
+
+      <!-- Transcription editor -->
+      <app-transcription-editor [recordingId]="recordingId"/>
+
+  </div>
+  }
+</div>

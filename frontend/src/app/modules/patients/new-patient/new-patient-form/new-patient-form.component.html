@@ -1,0 +1,93 @@
+<form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="patient-form">
+  <div class="form-grid">
+    <!-- Name field -->
+    <div class="form-field">
+      <label for="firstName" class="form-label">First Name</label>
+      <input id="firstName"
+             type="text"
+             formControlName="firstName"
+             placeholder="John"
+             class="input-field"
+             [class.error]="firstName?.invalid && firstName?.dirty"/>
+      @if (firstName?.invalid && firstName?.dirty) {
+        <p class="error-message">{{ getErrorMessage('name') }}</p>
+      }
+    </div>
+
+    <div class="form-field">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input id="lastName"
+             type="text"
+             formControlName="lastName"
+             placeholder="Doe"
+             class="input-field"
+             [class.error]="lastName?.invalid && lastName?.dirty"/>
+      @if (lastName?.invalid && lastName?.dirty) {
+        <p class="error-message">{{ getErrorMessage('name') }}</p>
+      }
+    </div>
+
+    <!-- Date of Birth field -->
+    <div class="form-field">
+      <label for="dob" class="form-label">Date of Birth</label>
+      <input id="dob" type="date" formControlName="dob" class="input-field"
+             [class.error]="dob?.invalid && dob?.dirty"/>
+      @if (dob?.invalid && dob?.dirty) {
+        <p class="error-message">{{ getErrorMessage('dob') }}</p>
+      }
+    </div>
+
+    <!-- Gender field -->
+    <div class="form-field">
+      <label for="gender" class="form-label">Gender</label>
+      <select id="gender"
+              formControlName="gender"
+              class="select-field"
+              [class.error]="gender?.invalid && gender?.dirty">
+        <option value="" disabled>Select gender</option>
+        @for (option of genderOptions; track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </select>
+      @if (gender?.invalid && gender?.dirty) {
+        <p class="error-message">{{ getErrorMessage('gender') }}</p>
+      }
+    </div>
+
+    <!-- Email field -->
+    <div class="form-field">
+      <label for="email" class="form-label">Email Address</label>
+      <input id="email"
+             type="email"
+             formControlName="email"
+             placeholder="patient@example.com"
+             class="input-field"
+             [class.error]="email?.invalid && email?.dirty"/>
+      @if (email?.invalid && email?.dirty) {
+        <p class="error-message">{{ getErrorMessage('email') }}</p>
+      }
+    </div>
+
+    <!-- Phone field -->
+    <div class="form-field">
+      <label for="phone" class="form-label">Phone Number</label>
+      <input id="phone"
+             type="tel"
+             formControlName="phone"
+             placeholder="(555) 123-4567"
+             class="input-field"
+             [class.error]="phone?.invalid && phone?.dirty"/>
+      @if (phone?.invalid && phone?.dirty) {
+        <p class="error-message">{{ getErrorMessage('phone') }}</p>
+      }
+    </div>
+  </div>
+
+  <!-- Form actions -->
+  <div class="form-actions">
+    <button type="button" class="btn-outline" (click)="cancel()">Cancel</button>
+    <button type="submit" class="btn-primary" [disabled]="isLoading">
+      {{ isLoading ? 'Adding...' : 'Add Patient' }}
+    </button>
+  </div>
+</form>

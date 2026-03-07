@@ -1,0 +1,66 @@
+/* Timer container */
+.timer-container {
+  text-align: center;
+}
+
+/* Timer display */
+.timer-display {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-weight: 500;
+  color: hsl(var(--foreground));
+  letter-spacing: 0.025em;
+}
+
+/* Timer status text */
+.timer-status {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: hsl(var(--muted-foreground));
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+}
+
+/* Animation for recording state */
+@keyframes pulse-text {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Apply pulse animation when recording */
+:host-context(.recording) .timer-status,
+.timer-container:has(.recording) .timer-status {
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+/* Alternative: Use a class-based approach */
+.timer-status.recording {
+  animation: pulse-text 2s ease-in-out infinite;
+}
+
+/* Dark mode support */
+:host-context(.dark) .timer-display {
+  color: hsl(var(--foreground));
+}
+
+:host-context(.dark) .timer-status {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .timer-display {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .timer-status {
+    font-size: 0.75rem;
+    line-height: 1rem;
+  }
+}

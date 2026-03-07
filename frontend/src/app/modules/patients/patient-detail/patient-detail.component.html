@@ -1,0 +1,138 @@
+<div class="patient-detail">
+  @if (!patientId) {
+    <!-- No patient ID provided -->
+    <div class="error-message">
+      <p>Patient ID is required</p>
+    </div>
+  } @else if (isLoading) {
+    <!-- Loading state -->
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading patient information...</p>
+    </div>
+  } @else if (!patient) {
+    <!-- Patient not found -->
+    <div class="not-found">
+      <h2 class="not-found-title">Patient Not Found</h2>
+      <p class="not-found-text">
+        The patient you're looking for could not be found.
+      </p>
+      <button class="btn-primary" (click)="navigateToPatients()">
+        Return to Patients
+      </button>
+    </div>
+  } @else {
+    <!-- Main content -->
+    <div class="content-wrapper">
+      <!-- Header -->
+      <div class="page-header">
+        <h1 class="page-title">{{ patient.firstName }} {{ patient.lastName }}</h1>
+        <a [routerLink]="['/home/new-recording']" [queryParams]="{patientId}" class="btn-primary">
+          New Recording
+        </a>
+      </div>
+
+      <!-- Patient Information Card -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Patient Information</h2>
+        </div>
+        <div class="card-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <h3 class="info-label">Age</h3>
+              <p class="info-value">{{ calculateAge(patient.dob) }} years old</p>
+            </div>
+            <div class="info-item">
+              <h3 class="info-label">Date of Birth</h3>
+              <p class="info-value">{{ formatDate(patient.dob) }}</p>
+            </div>
+            <div class="info-item">
+              <h3 class="info-label">Gender</h3>
+              <p class="info-value">{{ getDisplayValue(patient.gender) }}</p>
+            </div>
+            <div class="info-item">
+              <h3 class="info-label">Email</h3>
+              <p class="info-value">{{ getDisplayValue(patient.email) }}</p>
+            </div>
+            <div class="info-item">
+              <h3 class="info-label">Phone</h3>
+              <p class="info-value">{{ getDisplayValue(patient.phone) }}</p>
+            </div>
+            <div class="info-item">
+              <h3 class="info-label">Last Visit</h3>
+              <p class="info-value">{{ patient.lastVisit| date:'yyyy-dd-MM' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-container">
+        <div class="tabs-list">
+          <button class="tab-trigger"
+                  [class.active]="activeTab === 'recordings'"
+                  (click)="setActiveTab('recordings')">
+            Recordings
+          </button>
+          <button class="tab-trigger"
+                  [class.active]="activeTab === 'history'"
+                  (click)="setActiveTab('history')">
+            Medical History
+          </button>
+        </div>
+
+        <!-- Recordings Tab Content -->
+        @if (activeTab === 'recordings') {
+          <div class="tab-content">
+            <div class="card">
+<!--              <div class="card-header">-->
+<!--                <h2 class="card-title">Patient Recordings</h2>-->
+<!--                <p class="card-description">Recorded conversations and transcriptions</p>-->
+<!--              </div>-->
+              <div class="card-content">
+                @if (recordings.length > 0) {
+                  <div class="recordings-list">
+                    @for (recording of recordings; track recording.id) {
+                      <div class="recording-card">
+                        <div class="recording-info">
+                          <p class="recording-title">Conversation</p>
+                          <p class="recording-date">{{ formatDateTime(recording.createdAt!) }}</p>
+                        </div>
+                        <a [routerLink]="['/home/transcription', recording.id]" class="btn-outline btn-sm">View</a>
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="empty-state">
+                    <p class="empty-text">No recordings for this patient</p>
+                    <a [routerLink]="['/home/new-recording']" [queryParams]="{patientId}" class="btn-primary mt-4">
+                      Create New Recording
+                    </a>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Medical History Tab Content -->
+        @if (activeTab === 'history') {
+          <div class="tab-content">
+            <div class="card">
+<!--              <div class="card-header">-->
+<!--                <h2 class="card-title">Medical History</h2>-->
+<!--                <p class="card-description">Patient's medical history and notes</p>-->
+<!--              </div>-->
+              <div class="card-content">
+                <p class="placeholder-text">
+                  Medical history will appear here when available
+                </p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

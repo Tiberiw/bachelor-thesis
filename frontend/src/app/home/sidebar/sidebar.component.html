@@ -1,0 +1,71 @@
+<div class="sidebar-container">
+  <!-- Logo and app name -->
+  <div class="sidebar-header">
+    <h1 class="sidebar-logo">
+      <span class="text-primary">med</span>
+      <span class="ml-1">speech.io</span>
+    </h1>
+
+    <!-- Close button for mobile -->
+    @if (isMobile) {
+      <button class="btn-ghost btn-icon" (click)="onClose.emit()">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    }
+  </div>
+
+  <!-- Navigation menu -->
+  <nav class="sidebar-nav">
+    <!-- Main action button -->
+    <button class="btn-primary w-full mb-6" (click)="navigateToRecord()">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      <span>New Recording</span>
+    </button>
+
+    <!-- Navigation links -->
+    <div class="nav-links">
+      @for (item of navItems; track item) {
+        <a [routerLink]="'/home' + item.path" routerLinkActive="active" class="nav-link" (click)="closeSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon"></path>
+          </svg>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </div>
+  </nav>
+
+  <!-- User profile / sign out section -->
+  <div class="sidebar-footer">
+    <div class="profile-dropdown" appClickOutside (clickOutside)="closeProfileMenu()">
+      <button class="profile-trigger" (click)="toggleProfileMenu()">
+        <div class="avatar">
+          <div class="avatar-fallback">
+            {{ getInitials(user?.firstName) }}
+          </div>
+        </div>
+        <div class="profile-info">
+          <p class="profile-name">Dr. {{ user?.firstName || 'User' }} {{ user?.lastName || '' }}</p>
+        </div>
+      </button>
+
+      <!-- Dropdown menu -->
+      @if (showProfileMenu) {
+        <div class="dropdown-menu">
+          <div class="dropdown-separator"></div>
+          <button class="dropdown-item" (click)="logout()">
+            <svg class="dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            <span>Sign out</span>
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</div>

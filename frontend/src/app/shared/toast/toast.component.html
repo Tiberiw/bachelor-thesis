@@ -1,0 +1,11 @@
+@if (toastService.showToast$ | async) {
+  <div
+    class="toast"
+    [class.clickable]="(toastService.redirectUrl$ | async)?.length"
+    (click)="onToastClick()">
+
+    <span>{{ toastService.message$ | async }}</span>
+
+    <button class="close-btn" (click)="close($event)">×</button>
+  </div>
+}

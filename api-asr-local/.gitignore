@@ -1,0 +1,6 @@
+whisper-large-v3-turbo/
+whisper-large-turbo-lora-finetuned-v3/
+whisper-base/
+whisper-base-lora-finetuned/
+.env
+__pycache__/

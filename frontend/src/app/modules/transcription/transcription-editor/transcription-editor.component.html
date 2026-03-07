@@ -1,0 +1,47 @@
+@if (recording) {
+  <div class="card transcription-editor">
+    <!-- Header -->
+    <div class="card-header">
+      <h2 class="card-title">Patient Conversation</h2>
+      <div class="header-actions">
+        <button class="btn-outline btn-sm download-btn" (click)="handleDownloadPDF()">
+          <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          Download PDF
+        </button>
+        <!--        <div class="view-switcher">-->
+        <!--          <button class="btn-sm"-->
+        <!--            [class.btn-primary]="transcriptionView === 'transcription'"-->
+        <!--            [class.btn-outline]="transcriptionView !== 'transcription'"-->
+        <!--            (click)="setView('transcription')">-->
+        <!--            Transcription-->
+        <!--          </button>-->
+        <!--        </div>-->
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="card-content">
+      <div class="meta-info">
+        <p class="meta-text">
+          {{ wordCount }} words | Last updated: {{ formatLastUpdated() }}
+        </p>
+      </div>
+      <textarea class="text-editor" [formControl]="textControl" [placeholder]="'Transcription will appear here after processing...'"></textarea>
+    </div>
+
+    <!-- Footer -->
+    <div class="card-footer">
+      <div class="footer-hint">
+        Don't forget to save your changes
+      </div>
+      <button class="btn-primary" [disabled]="isSaving || !textControl.dirty" (click)="saveChanges()">Save Changes</button>
+    </div>
+  </div>
+} @else {
+  <div class="not-found">
+    <p>Recording not found</p>
+  </div>
+}

@@ -1,0 +1,53 @@
+@if (isLoading) {
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <svg class="h-8 w-8 animate-spin mx-auto text-primary" xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="mt-2 text-muted-foreground">Loading...</p>
+    </div>
+  </div>
+}
+
+<!-- Main Layout -->
+@if (!isLoading) {
+  <div class="min-h-screen flex flex-col md:flex-row relative">
+    <!-- Mobile Menu Button -->
+    @if (isMobile && !showMobileSidebar) {
+      <button class="btn-ghost btn-icon absolute top-4 left-4 z-50"
+              (click)="toggleMobileSidebar()"
+              aria-label="Toggle menu">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    }
+
+    <!-- Sidebar -->
+    <div [class.fixed]="isMobile"
+         [class.inset-0]="isMobile"
+         [class.z-40]="isMobile"
+         [class.relative]="!isMobile"
+         [class.hidden]="isMobile && !showMobileSidebar">
+      <app-sidebar (onClose)="closeMobileSidebar()"/>
+    </div>
+
+    <!-- Mobile Overlay -->
+    @if (isMobile && showMobileSidebar) {
+      <div
+        class="fixed inset-0 bg-black/50 z-30"
+        (click)="closeMobileSidebar()"
+      ></div>
+    }
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-auto md:ml-0 pt-16 md:pt-6">
+      <div class="max-w-6xl mx-auto">
+        <router-outlet/>
+      </div>
+    </main>
+  </div>
+}

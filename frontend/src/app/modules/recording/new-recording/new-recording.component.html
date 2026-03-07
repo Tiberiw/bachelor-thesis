@@ -1,0 +1,80 @@
+<div class="recording-page">
+  <div class="page-header">
+    <h1 class="page-title">Record Patient Conversation</h1>
+    <button class="btn-outline btn-sm" (click)="navigateBack()">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back
+    </button>
+  </div>
+
+  <!-- Patient selection -->
+  <div class="card mb-8">
+    <div class="card-header">
+      <h2 class="card-title">Select Patient</h2>
+      <p class="card-description">Choose the patient for this recording</p>
+    </div>
+    <div class="card-content">
+      <select class="select-field" [formControl]="patientControl" [disabled]="isRecording">
+        <option value="" disabled>Select a patient</option>
+        @for (patient of patients; track patient.id) {
+          <option [value]="patient.id">{{ patient.firstName }} {{ patient.lastName }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <!-- Recording UI -->
+  <div class="card mb-8">
+    <div class="card-content recording-ui">
+      <app-recording-button [isRecording]="isRecording"
+                            [disabled]="!patientControl.value"
+                            (onClick)="toggleRecording()"/>
+      <div class="mt-8">
+        <app-recording-timer [seconds]="recordingTime" [isRecording]="isRecording"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Upload and transcribe actions -->
+  <div class="action-grid mb-8">
+<!--    <div class="card">-->
+<!--      <div class="card-header">-->
+<!--        <h3 class="card-title-sm">Have an audio file?</h3>-->
+<!--      </div>-->
+<!--      <div class="card-content">-->
+<!--        <label class="upload-label" [class.disabled]="!canUpload">-->
+<!--          <div class="upload-content">-->
+<!--            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
+<!--              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"-->
+<!--                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>-->
+<!--            </svg>-->
+<!--            <div class="upload-text">-->
+<!--              {{ isUploading ? 'Uploading...' : 'Upload audio file' }}-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <input type="file"-->
+<!--                 class="hidden"-->
+<!--                 (change)="handleFileUpload($event)"-->
+<!--                 accept="audio/*"-->
+<!--                 [disabled]="!canUpload"/>-->
+<!--        </label>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title-sm">Ready to transcribe?</h3>
+      </div>
+      <div class="card-content">
+        <button class="btn-primary w-full transcribe-button"
+                (click)="handleTranscribe()"
+                [disabled]="!canTranscribe">
+          {{ isTranscribing ? 'Transcribing...' : 'Transcribe Recording' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

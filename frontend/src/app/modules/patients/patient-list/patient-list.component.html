@@ -1,0 +1,66 @@
+<div class="patient-list-container">
+  <!-- Search and add patient row -->
+  <div class="search-row">
+    <div class="search-input-wrapper">
+      <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input type="text"
+             class="input-field search-input"
+             placeholder="Search patients..."
+             [formControl]="searchControl"/>
+    </div>
+    <a routerLink="/home/patients/new-patient" class="btn-primary add-patient-btn">
+      <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+      </svg>
+      Add Patient
+    </a>
+  </div>
+
+  <!-- Patient list -->
+  <div class="patient-grid">
+    @if (isLoading) {
+      <!-- Loading state -->
+      @for (_ of skeletonArray; track $index) {
+        <div class="card skeleton-card">
+          <div class="card-content skeleton-content">
+            <div class="skeleton-avatar"></div>
+            <div class="skeleton-text-wrapper">
+              <div class="skeleton-text skeleton-name"></div>
+              <div class="skeleton-text skeleton-info"></div>
+            </div>
+          </div>
+        </div>
+      }
+    } @else if (filteredPatients.length > 0) {
+      <!-- Patients list -->
+      @for (patient of filteredPatients; track patient.id) {
+        <a [routerLink]="['/patients', patient.id]" (click)="selectPatient(patient.id!)" class="patient-card-link">
+          <div class="card patient-card">
+            <div class="card-content patient-card-content">
+              <div class="patient-avatar">
+                <svg class="avatar-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+              </div>
+              <div class="patient-info">
+                <p class="patient-name">{{ patient.firstName }} {{patient.lastName}}</p>
+                <p class="patient-last-visit">
+                  {{ patient.lastVisit ? 'Last visit: ' + (patient.lastVisit | date:'yyyy-dd-MM') : 'New patient' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </a>
+      }
+    } @else {
+      <!-- No results state -->
+      <div class="no-results">
+        <p class="no-results-text">No patients found</p>
+      </div>
+    }
+  </div>
+</div>

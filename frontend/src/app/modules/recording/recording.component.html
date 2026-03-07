@@ -1,0 +1,44 @@
+<div class="recordings-container">
+  <!-- Header -->
+  <div class="page-header">
+    <h1 class="page-title">Recordings</h1>
+    <a routerLink="/home/new-recording" class="btn-primary">New Recording</a>
+  </div>
+
+  <!-- Recordings list -->
+  @if (recordings.length > 0) {
+    <div class="recordings-list">
+      @for (recording of recordings; track recording.id) {
+        <a [routerLink]="['/home/transcription', recording.id]"
+          class="recording-link">
+          <div class="card recording-card">
+            <div class="card-content recording-content">
+              <div class="recording-info">
+                <div class="recording-header">
+                  <div class="status-indicator" [class]="getStatusColorClass(recording.status)"></div>
+                  <p class="patient-name">{{ getPatientName(recording.patientId!) }}</p>
+                </div>
+                <p class="recording-meta">
+                  {{ formatDate(recording.createdAt!) }} • {{ formatDuration(recording.duration!) }}
+                </p>
+              </div>
+              <div class="recording-status">
+                <span [class]="getStatusTextClass(recording.status)">
+                  {{ getStatusText(recording.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </a>
+      }
+    </div>
+  } @else {
+    <!-- Empty state -->
+    <div class="card empty-state-card">
+      <div class="card-content empty-state-content">
+        <p class="empty-state-text">No recordings found</p>
+        <a routerLink="/new-recording" class="btn-primary">Create Your First Recording</a>
+      </div>
+    </div>
+  }
+</div>

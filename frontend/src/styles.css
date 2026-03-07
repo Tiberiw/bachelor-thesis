@@ -1,0 +1,374 @@
+
+/*@import "tailwindcss";*/
+
+/*@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');*/
+
+/*@theme {*/
+/*  --color-medical-50: #f0f9ff;*/
+/*  --color-medical-100: #e0f2fe;*/
+/*  --color-medical-200: #bae6fd;*/
+/*  --color-medical-300: #7dd3fc;*/
+/*  --color-medical-400: #38bdf8;*/
+/*  --color-medical-500: #0ea5e9;*/
+/*  --color-medical-600: #0284c7;*/
+/*  --color-medical-700: #0369a1;*/
+/*  --color-medical-800: #075985;*/
+/*  --color-medical-900: #0c4a6e;*/
+
+/*  --font-family-sans: 'Inter', system-ui, sans-serif;*/
+/*}*/
+
+/*@layer components {*/
+/*  .btn-primary {*/
+/*    @apply bg-medical-600 hover:bg-medical-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-medical-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;*/
+/*  }*/
+
+/*  .btn-secondary {*/
+/*    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;*/
+/*  }*/
+
+/*  .input-field {*/
+/*    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-medical-500 focus:border-medical-500 outline-none transition duration-200;*/
+/*  }*/
+
+/*  .card {*/
+/*    @apply bg-white rounded-xl shadow-lg border border-gray-100;*/
+/*  }*/
+/*}*/
+
+
+/* Import Inter font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Tailwind v4 imports */
+@import "tailwindcss";
+
+/* Theme configuration using CSS variables */
+@theme {
+  /* Font family */
+  --font-family-sans: 'Inter', sans-serif;
+
+  /* Container */
+  --container-padding: 2rem;
+  --container-max-width-2xl: 1400px;
+
+  /* Border radius values */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Custom animations */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-pulse-recording: pulse-recording 2s ease-in-out infinite;
+  --animate-wave-1: wave 1.2s linear infinite;
+  --animate-wave-2: wave 1.8s linear infinite;
+  --animate-wave-3: wave 1.5s linear infinite;
+  --animate-fade-in: fade-in 0.3s ease-in-out;
+  --animate-fade-out: fade-out 0.3s ease-in-out;
+
+  /* Clinical app specific colors */
+  --color-medical-blue-light: #D3E4FD;
+  --color-medical-blue: #33C3F0;
+  --color-medical-blue-dark: #1EAEDB;
+  --color-medical-gray-light: #F1F0FB;
+  --color-medical-gray: #8E9196;
+  --color-medical-gray-dark: #403E43;
+}
+
+/* CSS Variables for theme colors */
+:root {
+  --background: 210 40% 98%;
+  --foreground: 222.2 84% 4.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 222.2 84% 4.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 222.2 84% 4.9%;
+
+  --primary: 196 84% 53%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 240 12% 97%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+
+  --accent: 210 40% 96.1%;
+  --accent-foreground: 222.2 47.4% 11.2%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 214.3 31.8% 91.4%;
+  --input: 214.3 31.8% 91.4%;
+  --ring: 196 84% 53%;
+
+  --radius: 0.75rem;
+
+  --sidebar-background: 0 0% 100%;
+  --sidebar-foreground: 240 5.3% 26.1%;
+  --sidebar-primary: 196 84% 53%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 240 4.8% 95.9%;
+  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-border: 220 13% 91%;
+  --sidebar-ring: 196 84% 53%;
+}
+
+/* Dark mode */
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 196 84% 53%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+
+  --sidebar-background: 240 5.9% 10%;
+  --sidebar-foreground: 240 4.8% 95.9%;
+  --sidebar-primary: 196 84% 53%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 240 3.7% 15.9%;
+  --sidebar-accent-foreground: 240 4.8% 95.9%;
+  --sidebar-border: 240 3.7% 15.9%;
+  --sidebar-ring: 196 84% 53%;
+}
+
+/* Keyframe animations */
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes pulse-recording {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+@keyframes wave {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0.5); }
+  100% { transform: scaleY(1); }
+}
+
+@keyframes fade-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes fade-out {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Base styles */
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-family-sans);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Sound wave animation elements */
+.sound-wave-line {
+  background-color: hsl(var(--primary));
+  height: 2rem;
+  width: 0.25rem;
+  margin-left: 0.125rem;
+  margin-right: 0.125rem;
+  border-radius: 9999px;
+  transform-origin: center bottom;
+}
+
+/* Component styles */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-radius: 0.375rem;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-link.active {
+  background-color: hsl(var(--sidebar-accent));
+  color: hsl(var(--sidebar-accent-foreground));
+  font-weight: 500;
+}
+
+.sidebar-link:hover:not(.active) {
+  background-color: hsl(var(--sidebar-accent) / 0.5);
+  color: hsl(var(--sidebar-accent-foreground));
+}
+
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border-width: 1px;
+  border-style: solid;
+  border-color: hsl(var(--border));
+  border-radius: 0.375rem;
+  background-color: hsl(var(--background));
+}
+
+.btn-primary {
+  background-color: hsl(var(--primary));
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.9);
+}
+
+/* Utility classes for colors */
+.bg-background { background-color: hsl(var(--background)); }
+.bg-foreground { background-color: hsl(var(--foreground)); }
+.bg-card { background-color: hsl(var(--card)); }
+.bg-card-foreground { background-color: hsl(var(--card-foreground)); }
+.bg-popover { background-color: hsl(var(--popover)); }
+.bg-popover-foreground { background-color: hsl(var(--popover-foreground)); }
+.bg-primary { background-color: hsl(var(--primary)); }
+.bg-primary-foreground { background-color: hsl(var(--primary-foreground)); }
+.bg-secondary { background-color: hsl(var(--secondary)); }
+.bg-secondary-foreground { background-color: hsl(var(--secondary-foreground)); }
+.bg-muted { background-color: hsl(var(--muted)); }
+.bg-muted-foreground { background-color: hsl(var(--muted-foreground)); }
+.bg-accent { background-color: hsl(var(--accent)); }
+.bg-accent-foreground { background-color: hsl(var(--accent-foreground)); }
+.bg-destructive { background-color: hsl(var(--destructive)); }
+.bg-destructive-foreground { background-color: hsl(var(--destructive-foreground)); }
+
+.text-background { color: hsl(var(--background)); }
+.text-foreground { color: hsl(var(--foreground)); }
+.text-card { color: hsl(var(--card)); }
+.text-card-foreground { color: hsl(var(--card-foreground)); }
+.text-popover { color: hsl(var(--popover)); }
+.text-popover-foreground { color: hsl(var(--popover-foreground)); }
+.text-primary { color: hsl(var(--primary)); }
+.text-primary-foreground { color: hsl(var(--primary-foreground)); }
+.text-secondary { color: hsl(var(--secondary)); }
+.text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+.text-muted { color: hsl(var(--muted)); }
+.text-muted-foreground { color: hsl(var(--muted-foreground)); }
+.text-accent { color: hsl(var(--accent)); }
+.text-accent-foreground { color: hsl(var(--accent-foreground)); }
+.text-destructive { color: hsl(var(--destructive)); }
+.text-destructive-foreground { color: hsl(var(--destructive-foreground)); }
+
+.border-border { border-color: hsl(var(--border)); }
+.border-input { border-color: hsl(var(--input)); }
+.border-ring { border-color: hsl(var(--ring)); }
+
+/* Sidebar color utilities */
+.bg-sidebar { background-color: hsl(var(--sidebar-background)); }
+.bg-sidebar-foreground { background-color: hsl(var(--sidebar-foreground)); }
+.bg-sidebar-primary { background-color: hsl(var(--sidebar-primary)); }
+.bg-sidebar-primary-foreground { background-color: hsl(var(--sidebar-primary-foreground)); }
+.bg-sidebar-accent { background-color: hsl(var(--sidebar-accent)); }
+.bg-sidebar-accent-foreground { background-color: hsl(var(--sidebar-accent-foreground)); }
+
+.text-sidebar { color: hsl(var(--sidebar-background)); }
+.text-sidebar-foreground { color: hsl(var(--sidebar-foreground)); }
+.text-sidebar-primary { color: hsl(var(--sidebar-primary)); }
+.text-sidebar-primary-foreground { color: hsl(var(--sidebar-primary-foreground)); }
+.text-sidebar-accent { color: hsl(var(--sidebar-accent)); }
+.text-sidebar-accent-foreground { color: hsl(var(--sidebar-accent-foreground)); }
+
+.border-sidebar { border-color: hsl(var(--sidebar-background)); }
+.border-sidebar-border { border-color: hsl(var(--sidebar-border)); }
+.border-sidebar-ring { border-color: hsl(var(--sidebar-ring)); }
+
+/* Medical color utilities */
+.bg-medical-blue-light { background-color: var(--color-medical-blue-light); }
+.bg-medical-blue { background-color: var(--color-medical-blue); }
+.bg-medical-blue-dark { background-color: var(--color-medical-blue-dark); }
+.bg-medical-gray-light { background-color: var(--color-medical-gray-light); }
+.bg-medical-gray { background-color: var(--color-medical-gray); }
+.bg-medical-gray-dark { background-color: var(--color-medical-gray-dark); }
+
+.text-medical-blue-light { color: var(--color-medical-blue-light); }
+.text-medical-blue { color: var(--color-medical-blue); }
+.text-medical-blue-dark { color: var(--color-medical-blue-dark); }
+.text-medical-gray-light { color: var(--color-medical-gray-light); }
+.text-medical-gray { color: var(--color-medical-gray); }
+.text-medical-gray-dark { color: var(--color-medical-gray-dark); }
+
+/* Animation utilities */
+.animate-accordion-down { animation: var(--animate-accordion-down); }
+.animate-accordion-up { animation: var(--animate-accordion-up); }
+.animate-pulse-recording { animation: var(--animate-pulse-recording); }
+.animate-wave-1 { animation: var(--animate-wave-1); }
+.animate-wave-2 { animation: var(--animate-wave-2); }
+.animate-wave-3 { animation: var(--animate-wave-3); }
+.animate-fade-in { animation: var(--animate-fade-in); }
+.animate-fade-out { animation: var(--animate-fade-out); }
+
+/* Border radius utilities */
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-md { border-radius: var(--radius-md); }
+.rounded-sm { border-radius: var(--radius-sm); }

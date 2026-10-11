@@ -19,7 +19,6 @@ async def lifespan(app: FastAPI):
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     torch_dtype = torch.float16 if device == "cuda:0" else torch.float32
     load_dotenv(override=True)
-    print("After load_dotenv, HF_TOKEN:", os.getenv("HF_TOKEN"))
 
     hf_token = os.getenv("HF_TOKEN")
 

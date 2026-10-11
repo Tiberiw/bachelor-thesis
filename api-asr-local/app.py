@@ -18,12 +18,9 @@ async def lifespan(app: FastAPI):
     global transcriber
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
     torch_dtype = torch.float16 if device == "cuda:0" else torch.float32
-    print("Before load_dotenv, HF_TOKEN:", os.getenv("HF_TOKEN"))
-    load_dotenv(over)
-    print("After load_dotenv, HF_TOKEN:", os.getenv("HF_TOKEN"))
+    load_dotenv(override=True)
 
     hf_token = os.getenv("HF_TOKEN")
-    print("Using HF_TOKEN:", hf_token)
 
 # Add a check to ensure the token is provided
     if hf_token is None:

@@ -1,46 +1,45 @@
-import {Component, inject} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AfterViewInit, Component, ElementRef, NgZone, ViewChild, inject} from '@angular/core';
+import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
+import {GoogleIdentityService} from '../google-identity.service';
 
 @Component({
   selector: 'app-login',
-  imports: [
-    ReactiveFormsModule
-  ],
+  imports: [],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
-  private readonly fb = inject(FormBuilder);
+export class LoginComponent implements AfterViewInit {
+  private readonly authService = inject(AuthService);
+  private readonly googleIdentity = inject(GoogleIdentityService);
+  private readonly router = inject(Router);
+  private readonly zone = inject(NgZone);
 
-  loginForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]]
-  });
+  @ViewChild('googleButton') googleButton!: ElementRef<HTMLElement>;
+
   isLoading = false;
-  isSubmitted = false;
   errorMessage = '';
 
-  constructor(private readonly authService: AuthService) {}
-
-  onSubmit(): void {
-    if (this.loginForm.valid && !this.isLoading) {
-      this.isLoading = true;
-      this.errorMessage = '';
-
-      this.authService.sendMagicLink(this.loginForm.controls.email.value!).subscribe({
-        next: () => {
-          this.isSubmitted = true;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.errorMessage = 'Failed to send magic link. Please try again.';
-          this.isLoading = false;
-        }
+  ngAfterViewInit(): void {
+    this.googleIdentity
+      .renderButton(this.googleButton.nativeElement, credential => this.zone.run(() => this.onCredential(credential)))
+      .catch(() => {
+        this.errorMessage = 'Could not load Google sign-in. Check your connection or ad blocker and reload.';
       });
-    }
   }
 
-  get email() {
-    return this.loginForm.get('email');
+  private onCredential(credential: string): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.authService.loginWithGoogle(credential).subscribe({
+      next: response => {
+        this.isLoading = false;
+        this.router.navigate([response.isNewUser ? '/registration' : '/home']);
+      },
+      error: () => {
+        this.isLoading = false;
+        this.errorMessage = 'Google sign-in failed. Please try again.';
+      }
+    });
   }
 }

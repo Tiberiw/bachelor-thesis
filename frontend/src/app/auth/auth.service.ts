@@ -31,12 +31,8 @@ export class AuthService {
     }
   }
 
-  sendMagicLink(email: string): Observable<any> {
-    return this.http.post(`${this.API_URL}/auth/magic-link`, {email});
-  }
-
-  validateToken(token: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.API_URL}/auth/verify`, {token})
+  loginWithGoogle(credential: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.API_URL}/auth/google`, {credential})
       .pipe(
         tap(response => this.setAuthData(response))
       );

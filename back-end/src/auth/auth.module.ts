@@ -1,18 +1,15 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { googleOAuthClientProvider } from './google-oauth-client.provider';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { PassportModule } from '@nestjs/passport';
-import { MagicLink } from './entities/magic-link.entity';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
 import { UserModule } from '../user/user.module';
-import { MailModule } from '../mail/mail.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MagicLink]),
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -25,10 +22,9 @@ import { MailModule } from '../mail/mail.module';
       }),
     }),
     UserModule,
-    MailModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, googleOAuthClientProvider],
   exports: [AuthService],
 })
 export class AuthModule {}

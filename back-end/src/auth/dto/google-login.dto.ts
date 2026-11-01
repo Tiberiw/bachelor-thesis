@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class VerifyTokenDto {
+export class GoogleLoginDto {
   @IsNotEmpty()
   @IsString()
-  token: string;
+  credential: string;
 }

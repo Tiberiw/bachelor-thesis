@@ -3,6 +3,7 @@ import {Subject, takeUntil} from 'rxjs';
 import {Recording} from '../../../domain/recording';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {RecordingService} from '../../../services/recording.service';
+import {buildTranscriptPdf, transcriptFileName} from '../transcript-pdf';
 
 type TranscriptionView = 'transcription' | 'summary';
 
@@ -17,6 +18,7 @@ type TranscriptionView = 'transcription' | 'summary';
 })
 export class TranscriptionEditorComponent implements OnInit, OnDestroy {
   @Input() recordingId: string = "";
+  @Input() patientName = '';
 
   private destroy$ = new Subject<void>();
 
@@ -47,16 +49,37 @@ export class TranscriptionEditorComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  get isTranscribing(): boolean {
+    return this.recording?.status === 'transcribing';
+  }
+
+  get hasFailed(): boolean {
+    return this.recording?.status === 'failed';
+  }
+
   private loadRecording(): void {
     this.recordingService.getRecordingById(this.recordingId).subscribe(
       recording => {
-        this.recording = recording
-        if (recording.transcription) {
-          this.textControl.setValue(recording.transcription, { emitEvent: false });
-          this.updateWordCount(recording.transcription);
+        this.showRecording(recording);
+        // The back-end transcribes in the background; keep checking until it finishes.
+        if (recording.status === 'transcribing') {
+          this.recordingService.waitForCompletion(this.recordingId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(finished => this.showRecording(finished));
         }
       }
     );
+  }
+
+  private showRecording(recording: Recording): void {
+    this.recording = recording;
+    if (recording.updatedAt) {
+      this.lastUpdated = new Date(recording.updatedAt);
+    }
+    if (recording.transcription) {
+      this.textControl.setValue(recording.transcription, { emitEvent: false });
+      this.updateWordCount(recording.transcription);
+    }
   }
 
   private updateWordCount(text: string): void {
@@ -77,38 +100,19 @@ export class TranscriptionEditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  handleDownloadPDF(): void {
+  /** Downloads what's in the editor (including unsaved edits) as a PDF. */
+  async handleDownloadPDF(): Promise<void> {
     if (!this.recording) return;
 
-    const content = this.transcriptionView === 'transcription'
-      ? this.recording.transcription || ''
-      : this.recording.summary || '';
-
-    const duration = this.formatDuration(this.recording.duration!);
-
-    // Create a simple PDF-like content
-    const pdfContent = `Patient Conversation ${this.transcriptionView === 'transcription' ? 'Transcript' : 'Summary'}
-                        Date: ${new Date(this.recording.createdAt!).toLocaleDateString()}
-                        Duration: ${duration}
-
-                        ${content}`;
-
-    // Create and download file
-    const blob = new Blob([pdfContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `conversation-${this.transcriptionView}-${this.recording.id}.txt`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  }
-
-  private formatDuration(seconds: number): string {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    // Loaded on demand so the PDF library isn't in the main bundle.
+    const {jsPDF} = await import('jspdf');
+    const doc = buildTranscriptPdf(jsPDF, {
+      patientName: this.patientName,
+      date: this.recording.createdAt,
+      durationSeconds: this.recording.duration,
+      text: this.textControl.value || '',
+    });
+    doc.save(transcriptFileName(this.patientName, this.recording.createdAt, this.recording.id));
   }
 
   formatLastUpdated(): string {

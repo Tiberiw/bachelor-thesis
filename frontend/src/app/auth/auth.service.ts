@@ -1,3 +1,4 @@
+import {environment} from '../../environments/environment';
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, tap} from 'rxjs';
 import {User} from './user';
@@ -10,7 +11,7 @@ import {UserRegistrationRequest} from './user-registration-request';
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly API_URL = 'http://localhost:3000/api'; // Adjust as needed
+  private readonly API_URL = environment.apiUrl;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
 

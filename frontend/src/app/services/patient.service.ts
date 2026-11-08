@@ -1,3 +1,4 @@
+import {environment} from '../../environments/environment';
 import { Injectable } from '@angular/core';
 import {Patient} from '../domain/patient';
 import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
@@ -8,7 +9,7 @@ import {HttpClient} from '@angular/common/http';
 })
 export class PatientService {
 
-  private readonly apiUrl = 'http://localhost:3000/api/patient';
+  private readonly apiUrl = `${environment.apiUrl}/patient`;
 
   // State management
   private patientsSubject = new BehaviorSubject<Patient[]>([]);

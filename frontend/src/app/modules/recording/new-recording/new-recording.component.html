@@ -63,6 +63,8 @@
 <!--      </div>-->
 <!--    </div>-->
 
+    <!-- Only offered once there is a finished recording. -->
+    @if (hasFinishedRecording) {
     <div class="card">
       <div class="card-header">
         <h3 class="card-title-sm">Ready to transcribe?</h3>
@@ -75,6 +77,7 @@
         </button>
       </div>
     </div>
+    }
   </div>
 
 </div>

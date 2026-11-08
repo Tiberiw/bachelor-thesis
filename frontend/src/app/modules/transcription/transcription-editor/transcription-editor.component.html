@@ -4,7 +4,7 @@
     <div class="card-header">
       <h2 class="card-title">Patient Conversation</h2>
       <div class="header-actions">
-        <button class="btn-outline btn-sm download-btn" (click)="handleDownloadPDF()">
+        <button class="btn-outline btn-sm download-btn" (click)="handleDownloadPDF()" [disabled]="isTranscribing || hasFailed">
           <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -24,21 +24,41 @@
 
     <!-- Content -->
     <div class="card-content">
-      <div class="meta-info">
-        <p class="meta-text">
-          {{ wordCount }} words | Last updated: {{ formatLastUpdated() }}
-        </p>
-      </div>
-      <textarea class="text-editor" [formControl]="textControl" [placeholder]="'Transcription will appear here after processing...'"></textarea>
+      @if (isTranscribing) {
+        <div class="transcribing-state" role="status" aria-live="polite">
+          <div class="spinner"></div>
+          <p class="state-title">Transcribing your recording…</p>
+          <p class="state-hint">
+            This usually takes a few seconds. If the service has been idle, the first one can take up to a minute.
+            You can leave this page; the transcript will be saved.
+          </p>
+        </div>
+      } @else if (hasFailed) {
+        <div class="failed-state" role="alert">
+          <p class="state-title">Transcription failed</p>
+          <p class="state-hint">
+            The transcription service is unavailable right now. Please try recording again in a moment.
+          </p>
+        </div>
+      } @else {
+        <div class="meta-info">
+          <p class="meta-text">
+            {{ wordCount }} words | Last updated: {{ formatLastUpdated() }}
+          </p>
+        </div>
+        <textarea class="text-editor" [formControl]="textControl" placeholder="No speech was detected in this recording."></textarea>
+      }
     </div>
 
     <!-- Footer -->
+    @if (!isTranscribing && !hasFailed) {
     <div class="card-footer">
       <div class="footer-hint">
         Don't forget to save your changes
       </div>
       <button class="btn-primary" [disabled]="isSaving || !textControl.dirty" (click)="saveChanges()">Save Changes</button>
     </div>
+    }
   </div>
 } @else {
   <div class="not-found">

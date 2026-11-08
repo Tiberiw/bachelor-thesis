@@ -9,6 +9,7 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {Patient} from '../../../domain/patient';
 import {Subject, takeUntil} from 'rxjs';
 import {ToastService} from '../../../services/toast.service';
+import {TranscriptionWatcherService} from '../../../services/transcription-watcher.service';
 
 @Component({
   selector: 'app-new-recording',
@@ -22,7 +23,6 @@ import {ToastService} from '../../../services/toast.service';
 })
 export class NewRecordingComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
-  private componentRef: any;
 
 
   // Form controls
@@ -44,6 +44,7 @@ export class NewRecordingComponent implements OnInit, OnDestroy {
     private recordingService: RecordingService,
     private patientService: PatientService,
     private toastService: ToastService,
+    private transcriptionWatcher: TranscriptionWatcherService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -142,20 +143,20 @@ export class NewRecordingComponent implements OnInit, OnDestroy {
     }
 
     this.isTranscribing = true;
-    this.recordingService.transcribeAudio(this.patientControl.value!).subscribe(
-      response => {
+    // The transcript page shows progress; the watcher shows a toast if the user moves elsewhere.
+    this.recordingService.transcribeAudio(this.patientControl.value!).subscribe({
+      next: response => {
+        const patient = this.patients.find(p => p.id === this.patientControl.value);
+        this.transcriptionWatcher.watch(response.id, patient ? `${patient.firstName} ${patient.lastName}` : undefined);
+        // Start fresh next time the recording page opens.
+        this.recordingService.cleanup();
         this.router.navigate(['/home/transcription', response.id]);
-        this.recordingService.waitForCompletion(response.id).subscribe(result => {
-          console.log('Transcription done:', result.transcription);
-          this.isTranscribing = false;
-          if (this.componentRef && this.componentRef.updateText) {
-            this.componentRef.updateText(result.transcription);
-          }
-          this.toastService.show(`Transcription for recording ${result.id} is ready!`, `/home/transcription/${result.id}`);
-
-        });
-      });
-
+      },
+      error: () => {
+        this.isTranscribing = false;
+        this.toastService.show('Could not upload the recording. Please try again.');
+      },
+    });
   }
 
   async handleFileUpload(event: Event): Promise<void> {
@@ -191,11 +192,12 @@ export class NewRecordingComponent implements OnInit, OnDestroy {
     this.router.navigate(['..'], {relativeTo: this.route});
   }
 
+  get hasFinishedRecording(): boolean {
+    return !this.isRecording && this.currentRecording?.status === 'recorded';
+  }
+
   get canTranscribe(): boolean {
-    return this.currentRecording !== null &&
-      !this.isRecording &&
-      !this.isTranscribing &&
-      this.currentRecording.status === 'recorded';
+    return this.hasFinishedRecording && !this.isTranscribing;
   }
 
   get canUpload(): boolean {

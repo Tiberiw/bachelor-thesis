@@ -197,3 +197,63 @@
     min-height: 300px;
   }
 }
+
+/* Transcribing / failed states */
+.transcribing-state,
+.failed-state {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  border: 1px dashed hsl(var(--border));
+  border-radius: var(--radius-md);
+  background-color: hsl(var(--muted) / 0.4);
+}
+
+.failed-state {
+  border-color: hsl(var(--destructive) / 0.5);
+  background-color: hsl(var(--destructive) / 0.06);
+}
+
+.failed-state .state-title {
+  color: hsl(var(--destructive));
+}
+
+.state-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.state-hint {
+  margin: 0;
+  max-width: 28rem;
+  font-size: 0.875rem;
+  color: hsl(var(--muted-foreground));
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid hsl(var(--border));
+  border-top-color: hsl(var(--primary));
+  border-radius: 50%;
+  animation: editor-spin 1s linear infinite;
+}
+
+@keyframes editor-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 3s;
+  }
+}

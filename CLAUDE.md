@@ -16,6 +16,6 @@ Polyglot monorepo with no root tooling; each directory is run on its own.
 - TypeORM runs with `synchronize: true` (`back-end/src/app.module.ts`) and there are no migrations. Entity changes mutate the schema directly.
 - The back-end calls the ASR service at `ASR_URL` (required, no fallback) through Gradio's HTTP API (`back-end/src/transcription/asr.client.ts`). Changing `model-inference/` does not affect a back-end pointed at the Space until the Space is redeployed.
 - The frontend's API URL comes from `frontend/src/environments/` (`environment.development.ts` for `ng serve`, `environment.ts` for production builds).
-- Deploy: frontend on Cloudflare Pages (`frontend/public/_redirects` sends every route to `index.html`), back-end on Render via the root `render.yaml`, Postgres on Neon (`DATABASE_URL`, SSL). The back-end uses `DATABASE_URL` when set, otherwise the `DB_*` variables.
+- Deploy: frontend on Cloudflare Pages (`medspeech.pages.dev`) (`frontend/public/_redirects` sends every route to `index.html`), back-end on Render via the root `render.yaml`, Postgres on Neon (`DATABASE_URL`, SSL). The back-end uses `DATABASE_URL` when set, otherwise the `DB_*` variables.
 - Exclude `node_modules` when searching `back-end/` and `frontend/`.
 - Git: the default branch is `main`. GitHub `master` is a stale squashed copy; don't use it.

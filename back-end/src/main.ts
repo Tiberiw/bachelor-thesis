@@ -10,8 +10,12 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // Enable CORS
+  // FRONTEND_URL may list several origins, comma-separated.
   app.enableCors({
-    origin: configService.get('FRONTEND_URL') as string,
+    origin: configService
+      .getOrThrow<string>('FRONTEND_URL')
+      .split(',')
+      .map((origin) => origin.trim()),
     credentials: true,
   });
 

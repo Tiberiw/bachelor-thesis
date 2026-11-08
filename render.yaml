@@ -13,8 +13,9 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "22"
+      # Comma-separated list of allowed frontend origins.
       - key: FRONTEND_URL
-        value: https://bachelor-thesis.pages.dev
+        value: https://medspeech.pages.dev,https://bachelor-thesis.pages.dev
       - key: ASR_URL
         value: https://tiberiw-thesis-asr.hf.space
       # Public OAuth client ID (also in frontend/src/app/auth/google-client-id.ts).

@@ -9,6 +9,7 @@ import { PatientModule } from './patient/patient.module';
 import { TenantContextService } from './tenant/tenant-context.service';
 import { ConsultationModule } from './consultation/consultation.module';
 import { TranscriptionModule } from './transcription/transcription.module';
+import { databaseConfig } from './database.config';
 
 @Module({
   imports: [
@@ -18,16 +19,7 @@ import { TranscriptionModule } from './transcription/transcription.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get<number>('DB_PORT', 5432),
-        username: configService.get('DB_USERNAME', 'postgres'),
-        password: configService.getOrThrow('DB_PASSWORD'),
-        database: configService.get('DB_DATABASE', 'thesis'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
+      useFactory: databaseConfig,
     }),
     UserModule,
     AuthModule,

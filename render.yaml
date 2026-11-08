@@ -1,0 +1,29 @@
+# Render Blueprint for the back-end (Dashboard > New > Blueprint > pick this repo).
+# Redeploys on every push to main. Free plan: sleeps after 15 min idle.
+services:
+  - type: web
+    name: bachelor-thesis-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: back-end
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/main
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: FRONTEND_URL
+        value: https://bachelor-thesis.pages.dev
+      - key: ASR_URL
+        value: https://tiberiw-thesis-asr.hf.space
+      # Public OAuth client ID (also in frontend/src/app/auth/google-client-id.ts).
+      - key: GOOGLE_CLIENT_ID
+        value: 1063263679726-o17ml5tq8vou463eddbnp1ddp0ho8c53.apps.googleusercontent.com
+      - key: JWT_EXPIRATION
+        value: 8h
+      - key: JWT_SECRET
+        generateValue: true
+      # Neon connection string; Render asks for it when the Blueprint is created.
+      - key: DATABASE_URL
+        sync: false
